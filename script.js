@@ -6,16 +6,28 @@ document.getElementById('darkModeToggle').addEventListener('click', () => {
 // Cart functionality
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-function addToCart(product) {
-  cart.push(product);
+function saveCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function addToCart(product) {
+  const existing = cart.find(p => p.name === product.name);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    product.qty = 1;
+    cart.push(product);
+  }
+  saveCart();
   alert(product.name + " added to cart!");
+  renderCart();
 }
 
 // Render products
 if (document.getElementById('productList')) {
   const productList = document.getElementById('productList');
   const searchBar = document.getElementById('searchBar');
+
   function displayProducts(filter = "") {
     productList.innerHTML = "";
     products
@@ -37,19 +49,22 @@ if (document.getElementById('productList')) {
 }
 
 // Render cart
-if (document.getElementById('cartItems')) {
+function renderCart() {
   const cartItems = document.getElementById('cartItems');
   const cartTotal = document.getElementById('cartTotal');
-  let total = 0;
+  if (!cartItems || !cartTotal) return;
+
   cartItems.innerHTML = "";
+  let total = 0;
   cart.forEach(p => {
     let div = document.createElement('div');
-    div.innerHTML = `<p>${p.name} - ₹${p.price}</p>`;
+    div.innerHTML = `<p>${p.name} × ${p.qty} - ₹${p.price * p.qty}</p>`;
     cartItems.appendChild(div);
-    total += p.price;
+    total += p.price * p.qty;
   });
   cartTotal.innerText = "Total: ₹" + total;
 }
+renderCart();
 
 // Checkout form
 if (document.getElementById('checkoutForm')) {
