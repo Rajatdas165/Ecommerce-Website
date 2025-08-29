@@ -26,7 +26,7 @@ if (document.getElementById('productList')) {
         div.innerHTML = `
           <img src="images/${p.image}" alt="${p.name}">
           <h3>${p.name}</h3>
-          <p>$${p.price}</p>
+          <p>₹${p.price}</p>
           <button onclick='addToCart(${JSON.stringify(p)})'>Add to Cart</button>
         `;
         productList.appendChild(div);
@@ -44,11 +44,11 @@ if (document.getElementById('cartItems')) {
   cartItems.innerHTML = "";
   cart.forEach(p => {
     let div = document.createElement('div');
-    div.innerHTML = `<p>${p.name} - $${p.price}</p>`;
+    div.innerHTML = `<p>${p.name} - ₹${p.price}</p>`;
     cartItems.appendChild(div);
     total += p.price;
   });
-  cartTotal.innerText = "Total: $" + total;
+  cartTotal.innerText = "Total: ₹" + total;
 }
 
 // Checkout form
