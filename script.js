@@ -11,6 +11,9 @@ function saveCart() {
 }
 
 function addToCart(product) {
+  // Ensure price is a number
+  product.price = Number(product.price);
+
   const existing = cart.find(p => p.name === product.name);
   if (existing) {
     existing.qty += 1;
@@ -57,10 +60,14 @@ function renderCart() {
   cartItems.innerHTML = "";
   let total = 0;
   cart.forEach(p => {
+    // Ensure price and qty are numbers
+    const price = Number(p.price);
+    const qty = Number(p.qty) || 1;
+
     let div = document.createElement('div');
-    div.innerHTML = `<p>${p.name} × ${p.qty} - ₹${p.price * p.qty}</p>`;
+    div.innerHTML = `<p>${p.name} × ${qty} - ₹${price * qty}</p>`;
     cartItems.appendChild(div);
-    total += p.price * p.qty;
+    total += price * qty;
   });
   cartTotal.innerText = "Total: ₹" + total;
 }
